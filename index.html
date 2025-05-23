@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Anti-Corruption for SDG 16</title>
+
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+  <style>
+    html, body {
+      margin: 0; padding: 0;
+      font-family: 'Poppins', Arial, sans-serif;
+      background: #f5f5dc;
+      color: #111;
+      scroll-behavior: smooth;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    /* Link styles */
+    a {
+      color: #8b0000;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    a:hover, a:focus {
+      color: #cc3333;
+      text-decoration: none;
+    }
+
+    /* Animated gradient for title page */
+    @keyframes swirlGradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .intro {
+      height: 100vh;
+      background: radial-gradient(circle at center, #f5f5dc 0%, #c1b88f 40%, #8b0000 90%);
+      background-size: 200% 200%;
+      animation: swirlGradient 30s linear infinite;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .intro h1 {
+      font-size: 4em;
+      font-weight: 600;
+      color: #8b0000;
+      margin: 0;
+    }
+    .intro p {
+      font-size: 1.5em;
+      color: #333;
+      margin-bottom: 40px;
+      font-weight: 400;
+    }
+
+    #worldMap {
+      position: relative;
+      width: 80vw;
+      max-width: 1000px;
+      height: 500px;
+      margin: auto;
+      /* background: conic-gradient(from 90deg, #f5f5dc, #c1b88f, #8b0000); */
+      /* animation: swirl 30s linear infinite; */
+      border-radius: 15px;
+      box-shadow: 0 0 30px rgba(139, 0, 0, 0.4);
+    }
+
+    nav {
+      background: #8b0000;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      position: sticky;
+      padding-top: 20px;
+      padding-bottom: 20px;
+      top: 0;
+      z-index: 999;
+      
+    }
+    nav a {
+      color: white;
+      padding: 12px 20px;
+      display: block;
+      text-decoration: none;
+      transition: background 0.1s, transform 0.2s;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 15px;
+    }
+    nav a:hover {
+      background: #dcdcdc;
+      transform: scale(1.1);
+    }
+
+    section {
+      padding: 30px;
+      max-width: 1000px;
+      margin: 30px auto;
+      background: #dcdcdc;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(139,0,0,0.2);
+      transition: transform 0.3s;
+      font-weight: 400;
+      line-height: 1.6;
+    }
+    section:hover {
+      transform: scale(1.05);
+    }
+    h2 {
+      color: #a52a2a;
+      margin-top: 0;
+      font-weight: 600;
+    }
+    .scroll-container {
+      overflow-x: auto;
+    }
+    .scroll-container canvas {
+      min-width: 1000px;
+    }
+    input[type="text"], textarea {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #eee;
+      color: #111;
+      box-sizing: border-box;
+      resize: vertical;
+      min-height: 80px;
+      font-size: 1em;
+      font-family: 'Poppins', Arial, sans-serif;
+      font-weight: 400;
+    }
+    button {
+      background-color: #ff9933;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      margin-top: 10px;
+      transition: transform 0.2s, background-color 0.3s;
+      font-family: 'Poppins', Arial, sans-serif;
+      font-weight: 600;
+    }
+    button:hover {
+      transform: scale(1.1);
+      background-color: #cc7a00;
+    }
+
+    /* News section styling */
+    #news {
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      max-width: 1000px;
+      margin: 30px auto;
+      color: #111;
+    }
+    .news-article {
+      margin-bottom: 20px;
+    }
+    .news-article h3 {
+      font-size: 1.2em;
+      color: #8b0000;
+      margin-bottom: 5px;
+    }
+    .news-article p {
+      font-size: 1em;
+      color: #333;
+      margin: 2px 0;
+    }
+    .news-article a {
+      color: #8b0000;
+      text-decoration: none;
+    }
+    .news-article a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <!-- Intro Title Page -->
+  <div class="intro" id="intro">
+    <h1>Anti-Corruption for SDG 16</h1>
+    <p>Peace, Justice, and Strong Institutions</p>
+    <div id="worldMap"></div>
+  </div>
+
+  <!-- Navigation -->
+  <nav>
+    <a href="#corruption101">Corruption 101</a>
+    <a href="#dashboard">Dashboard</a>
+    <a href="#takeaction">Take Action</a>
+    <a href="#learninghub">Learning Hub</a>
+    <a href="#voices">Youth Voices</a>
+    <a href="#realife">SDG 16 in Real Life</a>
+    <a href="#interviews">Interviews</a>
+    <a href="#checklist">Checklist</a>
+    <a href="#gallery">Gallery</a>
+  </nav>
+
+  <!-- Content Sections -->
+
+  <section id="corruption101">
+    <h2>Corruption 101</h2>
+    <p><strong>Corruption:</strong> The abuse of power for personal gain.</p>
+    <p><strong>Bribery:</strong> Offering something of value to influence actions.</p>
+    <p><strong>Embezzlement:</strong> Theft of funds by someone trusted to manage them.</p>
+    <p><strong>Nepotism:</strong> Favoring relatives or friends in jobs or positions of power.</p>
+    <p><a href="https://sdgs.un.org/goals/goal16" target="_blank" rel="noopener">Learn about SDG 16</a></p>
+  </section>
+
+  <section id="dashboard">
+    <h2>Corruption Tracker Dashboard</h2>
+    <div class="scroll-container">
+      <canvas id="corruptionChart"></canvas>
+    </div>
+  </section>
+
+  <section id="takeaction">
+    <h2>Take Action</h2>
+    <ul>
+      <li>Report corruption through official platforms:</li>
+    </ul>
+    <textarea placeholder="Write your corruption report here..."></textarea>
+    <button onclick="alert('Report submitted! Thank you for taking action!')">Submit Report</button>
+    <ul>
+      <li>Join school clubs or awareness campaigns.</li>
+      <li>Email your representatives about transparency.</li>
+      <li><a href="https://sdgs.un.org/goals/goal16" target="_blank" rel="noopener">Get involved with UN SDG actions</a></li>
+    </ul>
+  </section>
+
+  <section id="learninghub">
+    <h2>Learning Hub</h2>
+    <div id="news">Loading news...</div>
+  </section>
+
+  <section id="voices">
+    <h2>Youth Voices</h2>
+    <p>Submit your essays, poems, artwork, or videos about corruption and justice!</p>
+    <textarea placeholder="Write your message or upload link here..."></textarea>
+    <button onclick="alert('Thank you for your voice!')">Submit</button>
+    <p><strong>Student Advocate of the Month:</strong> Coming soon!</p>
+  </section>
+
+  <section id="realife">
+    <h2>SDG 16 in Real Life</h2>
+    <ul>
+      <li><strong>Education:</strong> In the Democratic Republic of the Congo, corruption in teacher payroll systems delays salaries and reduces teaching quality.</li>
+      <li><strong>Healthcare:</strong> In Nigeria, patients often must pay bribes to access urgent care, weakening trust in hospitals.</li>
+      <li><strong>Housing:</strong> In Brazil, embezzlement in public housing programs leaves thousands without shelter.</li>
+      <li><strong>Climate Action:</strong> Corruption in environmental permits leads to illegal deforestation and pollution globally.</li>
+      <li><strong>Policing:</strong> Surveys show police bribery is one of the most reported forms of everyday corruption in Latin America.</li>
+    </ul>
+  </section>
+
+  <section id="interviews">
+    <h2>Interview Series</h2>
+    <p>Watch interviews with youth leaders, journalists, and experts.</p>
+    <p>Each week, a new story and a call to action!</p>
+  </section>
+
+  <section id="checklist">
+    <h2>Clean Institutions Checklist</h2>
+    <ul>
+      <li>Are budgets transparent?</li>
+      <li>Is there student or citizen participation in decisions?</li>
+      <li>Can people report wrongdoing safely?</li>
+    </ul>
+    <p><a href="#" rel="noopener">Download the Transparency Checklist (coming soon)</a></p>
+  </section>
+
+  <section id="gallery">
+    <h2>Peace & Justice Gallery</h2>
+    <p>Profiles of whistleblowers, peacebuilders, and change-makers.</p>
+    <p>Inspiration to act for justice and peace.</p>
+  </section>
+
+  <script>
+    // Initialize ECharts map
+    const map = echarts.init(document.getElementById('worldMap'));
+    fetch('https://cdn.jsdelivr.net/npm/echarts/map/json/world.json')
+      .then(res => res.json())
+      .then(data => {
+        echarts.registerMap('world', data);
+        map.setOption({
+          backgroundColor: 'transparent',
+          tooltip: { trigger: 'item' },
+          visualMap: {
+            min: 0,
+            max: 100,
+            text: ['Corrupt', 'Clean'],
+            realtime: false,
+            calculable: true,
+            inRange: { color: ['#a52a2a', '#f7c59f'] }
+          },
+          series: [{
+            name: 'CPI Score',
+            type: 'map',
+            map: 'world',
+            roam: true,
+            scaleLimit: {
+              min: 1,
+              max: 5
+            },
+            emphasis: { label: { show: true } },
+            data: (() => {
+              const labels = corruptionChart.data.labels;
+              const scores = corruptionChart.data.datasets[0].data;
+              return labels.map((country, index) => ({
+                name: country === 'US' ? 'United States' : country,
+                value: scores[index]
+              }));
+            })()
+          }]
+        });
+      });
+
+    // Chart.js bar chart
+    const ctx = document.getElementById('corruptionChart').getContext('2d');
+    const corruptionChart = new Chart(ctx, {
+      type: 'bar',
+      data : {
+  labels: [
+    "Denmark", "Greenland", "Finland", "Singapore", "New Zealand", "Luxembourg", "Norway", "Switzerland",
+    "Sweden", "Netherlands", "Australia", "Iceland", "Ireland", "Estonia", "Uruguay",
+    "Canada", "Germany", "Hong Kong", "Bhutan", "Seychelles", "Japan", "United Kingdom",
+    "Belgium", "Barbados", "United Arab Emirates", "Austria", "France", "Taiwan", "Bahamas",
+    "United States", "Israel", "Korea", "Chile", "Lithuania", "Saint Vincent and the Grenadines",
+    "Cape Verde", "Brunei", "Dominica", "Slovenia", "Latvia", "Qatar", "Saint Lucia", "Saudi Arabia",
+    "Costa Rica", "Botswana", "Portugal", "Rwanda", "Cyprus", "Czech Rep.", "Grenada",
+    "Spain", "Fiji", "Oman", "Italy", "Bahrain", "Georgia", "Poland", "Mauritius", "Malaysia",
+    "Vanuatu", "Greece", "Jordan", "Namibia", "Slovakia", "Armenia", "Croatia", "Kuwait",
+    "Malta", "Montenegro", "Romania", "Benin", "Côte d'Ivoire", "São Tomé and Príncipe", "Senegal",
+    "Jamaica", "Kosovo", "Timor-Leste", "Bulgaria", "China", "Moldova", "Solomon Islands",
+    "Albania", "Ghana", "Burkina Faso", "Cuba", "Hungary", "South Africa", "Tanzania",
+    "Trinidad and Tobago", "Kazakhstan", "Macedonia", "Suriname", "Vietnam", "Colombia",
+    "Guyana", "Tunisia", "Zambia", "Gambia", "India", "Maldives", "Argentina", "Ethiopia",
+    "Indonesia", "Lesotho", "Morocco", "Dominican Rep.", "Serbia", "Ukraine", "Algeria",
+    "Brazil", "Malawi", "Nepal", "Niger", "Thailand", "Turkey", "Belarus", "Bosnia and Herz.",
+    "Lao PDR", "Mongolia", "Panama", "Philippines", "Sierra Leone", "Angola", "Ecuador", "Kenya",
+    "Sri Lanka", "Togo", "Uzbekistan", "Djibouti", "Papua New Guinea", "Peru", "Egypt", "El Salvador",
+    "Mauritania", "Bolivia", "Guinea", "Eswatini", "Gabon", "Liberia", "Mali", "Pakistan",
+    "Cameroon", "Iraq", "Madagascar", "Mexico", "Nigeria", "Uganda", "Guatemala", "Kyrgyzstan",
+    "Mozambique", "Central African Rep.", "Paraguay", "Bangladesh", "Congo", "Iran",
+    "Azerbaijan", "Honduras", "Lebanon", "Russia", "Cambodia", "Chad", "Comoros", "Guinea-Bissau",
+    "Zimbabwe", "Dem. Rep. Congo", "Tajikistan", "Afghanistan", "Burundi",
+    "Turkmenistan", "Haiti", "Myanmar", "Dem. Rep. Korea", "Sudan", "Nicaragua", "Eq. Guinea",
+    "Eritrea", "Libya", "Yemen", "Syria", "Venezuela", "Somalia", "S. Sudan"
+  ],
+  datasets: [{
+    label: 'CPI Score (2024)',
+    data: [
+      90, 90, 88, 84, 83, 81, 81, 81, 80, 78, 77, 77, 77, 76, 76,
+      75, 75, 74, 72, 72, 71, 71, 69, 68, 68, 67, 67, 67, 65,
+      65, 64, 64, 63, 63, 63, 62, 60, 60, 60, 59, 59, 59, 59, 58,
+      57, 57, 57, 56, 56, 56, 56, 55, 55, 54, 53, 53, 53, 51,
+      50, 50, 49, 49, 49, 49, 47, 47, 46, 46, 46, 46, 45, 45,
+      45, 45, 44, 44, 44, 43, 43, 43, 43, 42, 42, 41, 41, 41,
+      41, 41, 41, 41, 40, 40, 40, 40, 39, 39, 39, 39, 38, 38,
+      38, 37, 37, 37, 37, 37, 36, 35, 35, 34, 34, 34, 34, 34,
+      34, 34, 34, 34, 33, 33, 33, 33, 33, 33, 33, 33, 32, 32,
+      32, 32, 32, 32, 31, 31, 31, 30, 30, 30, 28, 28, 27, 27,
+      27, 27, 27, 26, 26, 26, 26, 26, 26, 25, 25, 25, 24, 24,
+      23, 23, 23, 22, 22, 22, 22, 21, 21, 21, 21, 21, 20, 19,
+      17, 17, 17, 16, 16, 15, 15, 14, 13, 13, 13, 13, 12, 10,
+      9, 8
+    ],
+    backgroundColor: '#a52a2a'
+  }]
+},
+      options: {
+        indexAxis: 'x',
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100
+          }
+        }
+      }
+    });
+
+    // Fetch news for Learning Hub
+    document.addEventListener('DOMContentLoaded', function() {
+      const newsList = document.getElementById('news');
+      fetch('https://newsapi.org/v2/everything?q=corruption&sortBy=publishedAt&language=en&pageSize=5&apiKey=YOUR_API_KEY')
+        .then(response => response.json())
+        .then(data => {
+          if (data.articles && data.articles.length > 0) {
+            newsList.innerHTML = ''; // Clear "Loading news..."
+            data.articles.forEach(article => {
+              const articleElement = document.createElement('div');
+              articleElement.classList.add('news-article');
+              articleElement.innerHTML = `
+                <h3><a href="${article.url}" target="_blank" rel="noopener noreferrer">${article.title}</a></h3>
+                <p><strong>Source:</strong> ${article.source.name}</p>
+                <p><strong>Published:</strong> ${new Date(article.publishedAt).toLocaleDateString()}</p>
+                <p>${article.description || ''}</p>
+              `;
+              newsList.appendChild(articleElement);
+            });
+          } else {
+            newsList.innerHTML = '<p>No recent news found.</p>';
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching news:', error);
+          newsList.innerHTML = '<p>Failed to load news.</p>';
+        });
+    });
+  </script>
+</body>
+</html>
